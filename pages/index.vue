@@ -1,18 +1,38 @@
 <template>
   <section class="container">
-      <p>{{ message }}</p>
+      <!-- <p>{{ message }}</p>
       <hr>
-      <router-link to="/price">Price page</router-link>
+      <router-link to="/price">Price page</router-link> -->
+      <div>
+        <!-- {{ users[0].id }},{{ users[0].name }} -->
+        <ul>
+          <li v-for="user in users" :key="user.id">
+            {{ user.id }}, {{ user.name }},{{ user.company.name }}
+          </li>
+        </ul>
+      </div>
   </section>
 </template>
 
 
 <script>
+const axios = require('axios');
+let url = 'https://jsonplaceholder.typicode.com/usersxxx'
 export default {
-  data: function(){
-    return {
-      message: 'こんにちは！'
-    }
+  asyncData({ params,error }) {
+    return axios.get(url)
+    .then((res) => {
+      return { users: res.data }
+    })
+    .catch((e => {
+      // console.log(e.response.status)
+      error({ statusCode: e.response.status, message: 'エラーだよ' })
+    }))
   }
+  // data: function(){
+  //   return {
+  //     message: 'こんにちは！'
+  //   }
+  // }
 }
 </script>
